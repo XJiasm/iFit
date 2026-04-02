@@ -1,4 +1,4 @@
-import 'dart:io';
+﻿import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:share_plus/share_plus.dart';
@@ -75,12 +75,10 @@ class _TryOnResultScreenState extends ConsumerState<TryOnResultScreen> {
           _aiComment = AiCommentResponse.fromJson(response['data']);
         });
       } else {
-        // 使用模拟数据
-        _getMockComment();
+        _showToast(response['message']?.toString() ?? 'AI 点评失败，请稍后重试');
       }
     } catch (e) {
-      // 使用模拟数据
-      _getMockComment();
+      _showToast('AI 点评失败: $e');
     } finally {
       if (mounted) {
         setState(() => _isGettingAiComment = false);
@@ -88,42 +86,16 @@ class _TryOnResultScreenState extends ConsumerState<TryOnResultScreen> {
     }
   }
 
-  void _getMockComment() {
-    setState(() {
-      _aiComment = AiCommentResponse(
-        score: 85,
-        summary: '这件服装整体风格不错，很适合你的气质！',
-        color: ColorAnalysis(
-          score: 88,
-          comment: '颜色百搭，适合大多数肤色，尤其适合暖黄皮',
-          suitableSkinTones: ['暖黄皮', '冷白皮', '自然肤色'],
-        ),
-        style: StyleAnalysis(
-          score: 82,
-          comment: '简约大方，易于搭配，是衣橱必备单品',
-          tags: ['简约', '休闲', '百搭', '通勤'],
-        ),
-        occasions: ['日常休闲', '通勤上班', '朋友聚会', '约会'],
-        suggestions: [
-          '可搭配浅色牛仔裤或米色休闲裤',
-          '适合搭配简约风格的首饰',
-          '建议选择小白鞋或乐福鞋',
-        ],
-        conclusion: '推荐购买！这是一件百搭实用的单品，可以轻松驾驭多种场合。',
-      );
-    });
-  }
-
   Future<void> _shareResult() async {
     try {
       await Share.shareXFiles(
         [XFile(widget.resultPath)],
-        text: 'FitMirror 虚拟试穿效果',
+        text: 'FitMirror 铏氭嫙璇曠┛鏁堟灉',
       );
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('分享失败: $e')),
+          SnackBar(content: Text('鍒嗕韩澶辫触: $e')),
         );
       }
     }
@@ -132,12 +104,24 @@ class _TryOnResultScreenState extends ConsumerState<TryOnResultScreen> {
   Future<void> _saveToGallery() async {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: const Text('已保存到相册'),
+        content: const Text('宸蹭繚瀛樺埌鐩稿唽'),
         backgroundColor: AppTheme.accentColor,
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),
+      ),
+    );
+  }
+
+  void _showToast(String message) {
+    if (!mounted) {
+      return;
+    }
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        behavior: SnackBarBehavior.floating,
       ),
     );
   }
@@ -149,15 +133,15 @@ class _TryOnResultScreenState extends ConsumerState<TryOnResultScreen> {
       appBar: _buildAppBar(),
       body: Column(
         children: [
-          // 效果图展示
+          // 鏁堟灉鍥惧睍绀?
           Expanded(
             child: _buildResultImage(),
           ),
 
-          // AI 点评卡片
+          // AI 鐐硅瘎鍗＄墖
           if (_aiComment != null) _buildAiCommentCard(),
 
-          // 底部操作栏
+          // 搴曢儴鎿嶄綔鏍?
           _buildBottomBar(),
         ],
       ),
@@ -173,7 +157,7 @@ class _TryOnResultScreenState extends ConsumerState<TryOnResultScreen> {
         icon: const Icon(Icons.arrow_back),
         onPressed: () => Navigator.popUntil(context, (route) => route.isFirst),
       ),
-      title: const Text('试穿效果'),
+      title: const Text('璇曠┛鏁堟灉'),
       actions: [
         IconButton(
           icon: const Icon(Icons.share),
@@ -219,7 +203,7 @@ class _TryOnResultScreenState extends ConsumerState<TryOnResultScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // 顶部标签和评分
+              // 椤堕儴鏍囩鍜岃瘎鍒?
               Row(
                 children: [
                   Container(
@@ -238,7 +222,7 @@ class _TryOnResultScreenState extends ConsumerState<TryOnResultScreen> {
                         ),
                         const SizedBox(width: 4),
                         Text(
-                          'AI 穿搭点评',
+                          'AI 绌挎惌鐐硅瘎',
                           style: TextStyle(
                             fontSize: 12,
                             color: AppTheme.primaryColor,
@@ -258,7 +242,7 @@ class _TryOnResultScreenState extends ConsumerState<TryOnResultScreen> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Text(
-                      '${_aiComment!.score}分',
+                      '${_aiComment!.score}鍒?,
                       style: const TextStyle(
                         fontSize: 14,
                         color: Colors.white,
@@ -270,7 +254,7 @@ class _TryOnResultScreenState extends ConsumerState<TryOnResultScreen> {
               ),
               const SizedBox(height: 12),
 
-              // 总结
+              // 鎬荤粨
               Text(
                 _aiComment!.summary,
                 style: const TextStyle(
@@ -281,15 +265,15 @@ class _TryOnResultScreenState extends ConsumerState<TryOnResultScreen> {
               ),
               const SizedBox(height: 16),
 
-              // 评分详情
-              _buildScoreDetail('颜色匹配', _aiComment!.color.score, _aiComment!.color.comment),
+              // 璇勫垎璇︽儏
+              _buildScoreDetail('棰滆壊鍖归厤', _aiComment!.color.score, _aiComment!.color.comment),
               const SizedBox(height: 12),
-              _buildScoreDetail('风格契合', _aiComment!.style.score, _aiComment!.style.comment),
+              _buildScoreDetail('椋庢牸濂戝悎', _aiComment!.style.score, _aiComment!.style.comment),
               const SizedBox(height: 16),
 
-              // 适用场合
+              // 閫傜敤鍦哄悎
               Text(
-                '适用场合',
+                '閫傜敤鍦哄悎',
                 style: TextStyle(
                   fontSize: 12,
                   color: Colors.grey[400],
@@ -316,9 +300,9 @@ class _TryOnResultScreenState extends ConsumerState<TryOnResultScreen> {
               ),
               const SizedBox(height: 16),
 
-              // 搭配建议
+              // 鎼厤寤鸿
               Text(
-                '搭配建议',
+                '鎼厤寤鸿',
                 style: TextStyle(
                   fontSize: 12,
                   color: Colors.grey[400],
@@ -347,7 +331,7 @@ class _TryOnResultScreenState extends ConsumerState<TryOnResultScreen> {
 
               const SizedBox(height: 16),
 
-              // 结论
+              // 缁撹
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
@@ -455,7 +439,7 @@ class _TryOnResultScreenState extends ConsumerState<TryOnResultScreen> {
         top: false,
         child: Row(
           children: [
-            // AI 点评按钮
+            // AI 鐐硅瘎鎸夐挳
             Expanded(
               child: OutlinedButton.icon(
                 onPressed: _isGettingAiComment ? null : _getAiComment,
@@ -469,7 +453,7 @@ class _TryOnResultScreenState extends ConsumerState<TryOnResultScreen> {
                         ),
                       )
                     : const Icon(Icons.auto_awesome, size: 18),
-                label: Text(_aiComment != null ? '重新点评' : 'AI 点评'),
+                label: Text(_aiComment != null ? '閲嶆柊鐐硅瘎' : 'AI 鐐硅瘎'),
                 style: OutlinedButton.styleFrom(
                   foregroundColor: Colors.white,
                   side: const BorderSide(color: Colors.white54),
@@ -481,12 +465,12 @@ class _TryOnResultScreenState extends ConsumerState<TryOnResultScreen> {
               ),
             ),
             const SizedBox(width: 12),
-            // 保存按钮
+            // 淇濆瓨鎸夐挳
             Expanded(
               child: ElevatedButton.icon(
                 onPressed: _saveToGallery,
                 icon: const Icon(Icons.save_alt, size: 18),
-                label: const Text('保存'),
+                label: const Text('淇濆瓨'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppTheme.primaryColor,
                   foregroundColor: Colors.white,

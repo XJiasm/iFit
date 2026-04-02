@@ -1,4 +1,4 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+﻿import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:uuid/uuid.dart';
 
@@ -17,6 +17,11 @@ class ClothListNotifier extends StateNotifier<List<ClothItem>> {
   void _loadClothes() {
     final box = Hive.box<ClothItem>('clothes');
     state = box.values.toList();
+  }
+
+  /// 重新从本地存储加载数据
+  void reload() {
+    _loadClothes();
   }
 
   /// 添加服装

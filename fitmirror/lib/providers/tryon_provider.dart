@@ -1,4 +1,4 @@
-import 'dart:ui';
+﻿import 'dart:ui';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -19,6 +19,11 @@ class TryOnListNotifier extends StateNotifier<List<TryOnResult>> {
   void _loadTryOns() {
     final box = Hive.box<TryOnResult>('tryons');
     state = box.values.toList();
+  }
+
+  /// 重新从本地存储加载数据
+  void reload() {
+    _loadTryOns();
   }
 
   /// 添加试穿记录

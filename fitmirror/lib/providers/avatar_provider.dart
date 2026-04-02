@@ -1,4 +1,4 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+﻿import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:uuid/uuid.dart';
 
@@ -17,6 +17,11 @@ class AvatarListNotifier extends StateNotifier<List<Avatar>> {
   void _loadAvatars() {
     final box = Hive.box<Avatar>('avatars');
     state = box.values.toList();
+  }
+
+  /// 重新从本地存储加载数据
+  void reload() {
+    _loadAvatars();
   }
 
   /// 添加形象
