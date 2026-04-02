@@ -101,6 +101,7 @@ class _TopBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final hour = DateTime.now().hour;
+    final compact = MediaQuery.sizeOf(context).width < 380;
     final greeting = switch (hour) {
       < 6 => '深夜好',
       < 12 => '早安',
@@ -108,38 +109,66 @@ class _TopBar extends StatelessWidget {
       _ => '晚上好',
     };
 
-    return Row(
-      children: [
-        Expanded(
-          child: Column(
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final stacked = constraints.maxWidth < 360;
+
+        Widget copyBlock = Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              greeting,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              textScaler: const TextScaler.linear(1),
+              style: TextStyle(
+                color: AppTheme.textPrimaryDark,
+                fontSize: compact ? 24 : 28,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              '从形象开始，进入你的数字试衣间',
+              maxLines: stacked ? 2 : 1,
+              overflow: TextOverflow.ellipsis,
+              textScaler: const TextScaler.linear(1),
+              style: TextStyle(
+                color: Colors.white.withOpacity(0.64),
+                fontSize: compact ? 13 : 14,
+                height: 1.4,
+              ),
+            ),
+          ],
+        );
+
+        if (stacked) {
+          return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                greeting,
-                style: const TextStyle(
-                  color: AppTheme.textPrimaryDark,
-                  fontSize: 28,
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                '从形象开始，进入你的数字试衣间',
-                style: TextStyle(
-                  color: Colors.white.withOpacity(0.64),
-                  fontSize: 14,
-                ),
+              copyBlock,
+              const SizedBox(height: 12),
+              _PillButton(
+                icon: Icons.person_outline_rounded,
+                label: '形象',
+                onTap: onManageAvatar,
               ),
             ],
-          ),
-        ),
-        const SizedBox(width: 12),
-        _PillButton(
-          icon: Icons.person_outline_rounded,
-          label: '形象',
-          onTap: onManageAvatar,
-        ),
-      ],
+          );
+        }
+
+        return Row(
+          children: [
+            Expanded(child: copyBlock),
+            const SizedBox(width: 12),
+            _PillButton(
+              icon: Icons.person_outline_rounded,
+              label: '形象',
+              onTap: onManageAvatar,
+            ),
+          ],
+        );
+      },
     );
   }
 }
@@ -159,122 +188,140 @@ class _EmptyStage extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        final compact = constraints.maxHeight < 760;
-        final heroWidth = compact ? 180.0 : 230.0;
-        final heroHeight = compact ? 236.0 : 300.0;
-        final heroRadius = compact ? 90.0 : 120.0;
-        final iconSize = compact ? 78.0 : 98.0;
+        final narrow = constraints.maxWidth < 380;
+        final short = constraints.maxHeight < 760;
+        final compact = narrow || short;
+        final textScaler =
+            MediaQuery.textScalerOf(context).clamp(maxScaleFactor: 1.05);
+        final heroWidth = compact ? 160.0 : 230.0;
+        final heroHeight = compact ? 210.0 : 300.0;
+        final heroRadius = compact ? 82.0 : 120.0;
+        final iconSize = compact ? 68.0 : 98.0;
 
-        return SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(20, 18, 20, 24),
-          child: ConstrainedBox(
-            constraints: BoxConstraints(minHeight: constraints.maxHeight - 42),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const _TopBar(onManageAvatar: _noop),
-                SizedBox(height: compact ? 16 : 24),
-                Container(
-                  width: double.infinity,
-                  padding: EdgeInsets.fromLTRB(
-                    compact ? 18 : 24,
-                    compact ? 20 : 28,
-                    compact ? 18 : 24,
-                    compact ? 20 : 28,
-                  ),
-                  decoration: BoxDecoration(
-                    color: AppTheme.surfaceDark,
-                    borderRadius: BorderRadius.circular(AppTheme.radiusXxl),
-                    border: Border.all(color: AppTheme.dividerDark),
-                  ),
-                  child: Column(
-                    children: [
-                      Container(
-                        width: heroWidth,
-                        height: heroHeight,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(heroRadius),
-                          gradient: AppTheme.stageBackgroundDark,
-                          border: Border.all(
-                            color: AppTheme.primaryLight.withOpacity(0.5),
-                            width: 2,
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(textScaler: textScaler),
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.fromLTRB(20, 18, 20, 24),
+            child: ConstrainedBox(
+              constraints:
+                  BoxConstraints(minHeight: constraints.maxHeight - 42),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const _TopBar(onManageAvatar: _noop),
+                  SizedBox(height: compact ? 16 : 24),
+                  Container(
+                    width: double.infinity,
+                    padding: EdgeInsets.fromLTRB(
+                      compact ? 16 : 24,
+                      compact ? 18 : 28,
+                      compact ? 16 : 24,
+                      compact ? 18 : 28,
+                    ),
+                    decoration: BoxDecoration(
+                      color: AppTheme.surfaceDark,
+                      borderRadius: BorderRadius.circular(AppTheme.radiusXxl),
+                      border: Border.all(color: AppTheme.dividerDark),
+                    ),
+                    child: Column(
+                      children: [
+                        Container(
+                          width: heroWidth,
+                          height: heroHeight,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(heroRadius),
+                            gradient: AppTheme.stageBackgroundDark,
+                            border: Border.all(
+                              color: AppTheme.primaryLight.withOpacity(0.5),
+                              width: 2,
+                            ),
+                            boxShadow: AppTheme.primaryGlow,
                           ),
-                          boxShadow: AppTheme.primaryGlow,
-                        ),
-                        child: Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            Positioned.fill(
-                              child: DecoratedBox(
-                                decoration: BoxDecoration(
-                                  gradient: RadialGradient(
-                                    colors: [
-                                      AppTheme.primaryLight.withOpacity(0.22),
-                                      Colors.transparent,
-                                    ],
+                          child: Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              Positioned.fill(
+                                child: DecoratedBox(
+                                  decoration: BoxDecoration(
+                                    gradient: RadialGradient(
+                                      colors: [
+                                        AppTheme.primaryLight.withOpacity(0.22),
+                                        Colors.transparent,
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
+                              Icon(
+                                Icons.person_outline_rounded,
+                                size: iconSize,
+                                color: AppTheme.primaryLight.withOpacity(0.8),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: compact ? 16 : 26),
+                        SizedBox(
+                          width: double.infinity,
+                          child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              '开始你的数字展台',
+                              maxLines: 1,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: AppTheme.textPrimaryDark,
+                                fontSize: compact ? 22 : 30,
+                                fontWeight: FontWeight.w800,
+                              ),
                             ),
-                            Icon(
-                              Icons.person_outline_rounded,
-                              size: iconSize,
-                              color: AppTheme.primaryLight.withOpacity(0.8),
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        ConstrainedBox(
+                          constraints: const BoxConstraints(maxWidth: 360),
+                          child: Text(
+                            '先上传一张全身照，后续截图导入、试穿编辑、AI 点评都会围绕这个形象展开。',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.white.withOpacity(0.64),
+                              fontSize: compact ? 13 : 14,
+                              height: 1.5,
                             ),
-                          ],
+                          ),
                         ),
-                      ),
-                      SizedBox(height: compact ? 18 : 26),
-                      Text(
-                        '开始你的数字展台',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: AppTheme.textPrimaryDark,
-                          fontSize: compact ? 24 : 30,
-                          fontWeight: FontWeight.w800,
+                        SizedBox(height: compact ? 18 : 28),
+                        _PrimaryButton(
+                          label: '创建我的形象',
+                          icon: Icons.add_photo_alternate_outlined,
+                          onTap: onCreateAvatar,
                         ),
-                      ),
-                      const SizedBox(height: 10),
-                      Text(
-                        '先上传一张全身照，后续截图导入、试穿编辑、AI 点评都会围绕这个形象展开。',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.white.withOpacity(0.64),
-                          fontSize: compact ? 13 : 14,
-                          height: 1.6,
-                        ),
-                      ),
-                      SizedBox(height: compact ? 20 : 28),
-                      _PrimaryButton(
-                        label: '创建我的形象',
-                        icon: Icons.add_photo_alternate_outlined,
-                        onTap: onCreateAvatar,
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                SizedBox(height: compact ? 14 : 18),
-                Center(
-                  child: Wrap(
-                    alignment: WrapAlignment.center,
-                    spacing: 20,
-                    runSpacing: 8,
-                    children: [
-                      _GhostLink(
-                        label: '浏览资产',
-                        icon: Icons.inventory_2_outlined,
-                        onTap: onBrowseCloset,
-                      ),
-                      _GhostLink(
-                        label: '进入创意',
-                        icon: Icons.auto_awesome_rounded,
-                        onTap: onStartStudio,
-                      ),
-                    ],
+                  SizedBox(height: compact ? 14 : 18),
+                  Center(
+                    child: Wrap(
+                      alignment: WrapAlignment.center,
+                      spacing: 20,
+                      runSpacing: 8,
+                      children: [
+                        _GhostLink(
+                          label: '浏览资产',
+                          icon: Icons.inventory_2_outlined,
+                          onTap: onBrowseCloset,
+                        ),
+                        _GhostLink(
+                          label: '进入创意',
+                          icon: Icons.auto_awesome_rounded,
+                          onTap: onStartStudio,
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         );
@@ -542,6 +589,7 @@ class _Eyebrow extends StatelessWidget {
           const SizedBox(width: 8),
           Text(
             label,
+            textScaler: const TextScaler.linear(1),
             style: TextStyle(
               color: Colors.white.withOpacity(0.82),
               fontSize: 11,
@@ -573,6 +621,7 @@ class _MiniMetric extends StatelessWidget {
         children: [
           Text(
             value,
+            textScaler: const TextScaler.linear(1),
             style: const TextStyle(
               color: AppTheme.textPrimaryDark,
               fontSize: 14,
@@ -582,6 +631,7 @@ class _MiniMetric extends StatelessWidget {
           const SizedBox(height: 2),
           Text(
             label,
+            textScaler: const TextScaler.linear(1),
             style: TextStyle(
               color: Colors.white.withOpacity(0.5),
               fontSize: 11,
@@ -623,6 +673,7 @@ class _PillButton extends StatelessWidget {
             const SizedBox(width: 8),
             Text(
               label,
+              textScaler: const TextScaler.linear(1),
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 13,
@@ -666,6 +717,7 @@ class _PrimaryButton extends StatelessWidget {
             const SizedBox(width: 10),
             Text(
               label,
+              textScaler: const TextScaler.linear(1),
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 16,
@@ -710,6 +762,7 @@ class _GhostButton extends StatelessWidget {
             const SizedBox(width: 8),
             Text(
               label,
+              textScaler: const TextScaler.linear(1),
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 14,
@@ -741,6 +794,7 @@ class _GhostLink extends StatelessWidget {
       icon: Icon(icon, size: 16, color: Colors.white.withOpacity(0.72)),
       label: Text(
         label,
+        textScaler: const TextScaler.linear(1),
         style: TextStyle(color: Colors.white.withOpacity(0.72)),
       ),
     );

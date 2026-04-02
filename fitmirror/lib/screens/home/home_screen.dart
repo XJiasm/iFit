@@ -93,54 +93,59 @@ class _GlassNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textScaler =
+        MediaQuery.textScalerOf(context).clamp(maxScaleFactor: 1.0);
+
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(34),
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 24, sigmaY: 24),
-          child: Container(
-            height: 88,
-            decoration: BoxDecoration(
-              gradient: AppTheme.glassGradient,
-              borderRadius: BorderRadius.circular(34),
-              border: Border.all(
-                color: Colors.white.withOpacity(0.12),
+      child: MediaQuery(
+        data: MediaQuery.of(context).copyWith(textScaler: textScaler),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(34),
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 24, sigmaY: 24),
+            child: Container(
+              height: 92,
+              decoration: BoxDecoration(
+                gradient: AppTheme.glassGradient,
+                borderRadius: BorderRadius.circular(34),
+                border: Border.all(
+                  color: Colors.white.withOpacity(0.12),
+                ),
+                boxShadow: AppTheme.navShadow,
               ),
-              boxShadow: AppTheme.navShadow,
-            ),
-            child: Stack(
-              children: [
-                Positioned(
-                  left: 18,
-                  right: 18,
-                  top: 0,
-                  child: Container(
-                    height: 1,
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [
-                          Colors.transparent,
-                          Colors.white.withOpacity(0.20),
-                          Colors.transparent,
-                        ],
+              child: Stack(
+                children: [
+                  Positioned(
+                    left: 18,
+                    right: 18,
+                    top: 0,
+                    child: Container(
+                      height: 1,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            Colors.transparent,
+                            Colors.white.withOpacity(0.20),
+                            Colors.transparent,
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: List.generate(tabs.length, (index) {
-                    final badge = index == 1 ? closetBadge : null;
-                    return _NavItem(
-                      tab: tabs[index],
-                      isSelected: currentIndex == index,
-                      badge: badge,
-                      onTap: () => onTap(index),
-                    );
-                  }),
-                ),
-              ],
+                  Row(
+                    children: List.generate(tabs.length, (index) {
+                      final badge = index == 1 ? closetBadge : null;
+                      return _NavItem(
+                        tab: tabs[index],
+                        isSelected: currentIndex == index,
+                        badge: badge,
+                        onTap: () => onTap(index),
+                      );
+                    }),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -170,7 +175,7 @@ class _NavItem extends StatelessWidget {
       child: InkWell(
         onTap: onTap,
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+          padding: const EdgeInsets.symmetric(vertical: 9, horizontal: 2),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -179,8 +184,8 @@ class _NavItem extends StatelessWidget {
                 children: [
                   AnimatedContainer(
                     duration: const Duration(milliseconds: 220),
-                    width: 34,
-                    height: 34,
+                    width: 32,
+                    height: 32,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       gradient: isSelected ? AppTheme.primaryGradient : null,
@@ -189,7 +194,7 @@ class _NavItem extends StatelessWidget {
                     ),
                     child: Icon(
                       isSelected ? tab.iconFilled : tab.iconOutlined,
-                      size: 18,
+                      size: 17,
                       color: isSelected ? Colors.white : inactiveColor,
                     ),
                   ),
@@ -208,6 +213,7 @@ class _NavItem extends StatelessWidget {
                         ),
                         child: Text(
                           badge!,
+                          textScaler: const TextScaler.linear(1),
                           style: const TextStyle(
                             color: Colors.white,
                             fontSize: 9,
@@ -226,6 +232,9 @@ class _NavItem extends StatelessWidget {
                   child: Text(
                     tab.label,
                     maxLines: 1,
+                    overflow: TextOverflow.fade,
+                    softWrap: false,
+                    textScaler: const TextScaler.linear(1),
                     style: TextStyle(
                       color: isSelected
                           ? AppTheme.primaryLight
