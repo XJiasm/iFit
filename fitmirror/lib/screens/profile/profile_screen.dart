@@ -51,8 +51,8 @@ class ProfileScreen extends ConsumerWidget {
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(20, 24, 20, 12),
                   child: _SectionHeader(
-                    title: '璁剧疆涓庡悓姝?,
-                    subtitle: '璐﹀彿銆佷富棰樸€佸悓姝ュ拰鏈湴鏁版嵁绠＄悊',
+                    title: '设置与同步',
+                    subtitle: '账号、主题、同步和本地数据管理',
                   ),
                 ),
               ),
@@ -63,8 +63,8 @@ class ProfileScreen extends ConsumerWidget {
                     children: [
                       _SettingRow(
                         icon: Icons.dark_mode_outlined,
-                        title: '娣辫壊涓婚',
-                        subtitle: '榛樿鍚敤 FitMirror 娣辫壊鍝佺墝妯″紡',
+                        title: '深色主题',
+                        subtitle: '默认启用 FitMirror 深色品牌模式',
                         trailing: Switch(
                           value: themeMode == ThemeMode.dark,
                           activeColor: AppTheme.primaryLight,
@@ -76,16 +76,16 @@ class ProfileScreen extends ConsumerWidget {
                       ),
                       _SettingRow(
                         icon: Icons.cloud_sync_outlined,
-                        title: '鏁版嵁鍚屾',
+                        title: '数据同步',
                         subtitle:
-                            userState.isLoggedIn ? '鍚屾鏈湴鏁版嵁鍒颁簯绔? : '鐧诲綍鍚庡彲寮€鍚簯绔悓姝?,
+                            userState.isLoggedIn ? '同步本地数据到云端' : '登录后可开启云端同步',
                         onTap: () =>
                             _showSyncDialog(context, ref, userState.isLoggedIn),
                       ),
                       _SettingRow(
                         icon: Icons.storage_outlined,
-                        title: '鏈湴瀛樺偍',
-                        subtitle: '鏌ョ湅缂撳瓨鍗犵敤鍜屾竻鐞嗙瓥鐣?,
+                        title: '本地存储',
+                        subtitle: '查看缓存占用和清理策略',
                         onTap: () => _showStorageSheet(context),
                       ),
                     ],
@@ -96,8 +96,8 @@ class ProfileScreen extends ConsumerWidget {
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(20, 24, 20, 12),
                   child: _SectionHeader(
-                    title: '浼氬憳鏉冪泭',
-                    subtitle: '鎶?AI 鐐硅瘎銆佽瘯绌挎鏁板拰澶氬舰璞¤兘鍔涘綊鍏ュ悓涓€鍝佺墝浣撶郴',
+                    title: '会员权益',
+                    subtitle: '将 AI 点评、试穿次数和多形象能力纳入同一品牌体系',
                   ),
                 ),
               ),
@@ -111,8 +111,8 @@ class ProfileScreen extends ConsumerWidget {
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(20, 24, 20, 12),
                   child: _SectionHeader(
-                    title: '鏇村',
-                    subtitle: '鍙嶉銆侀殣绉佸拰璐﹀彿鎿嶄綔',
+                    title: '更多',
+                    subtitle: '反馈、隐私和账号操作',
                   ),
                 ),
               ),
@@ -128,24 +128,24 @@ class ProfileScreen extends ConsumerWidget {
                     children: [
                       _SettingRow(
                         icon: Icons.feedback_outlined,
-                        title: '鎰忚鍙嶉',
-                        subtitle: '璁板綍浣犲璇曠┛浣撻獙鍜?AI 鐐硅瘎鐨勫缓璁?,
-                        onTap: () => _showMessage(context, '鍙嶉鍏ュ彛鍚庣画鎺ュ叆'),
+                        title: '意见反馈',
+                        subtitle: '记录你对试穿体验和 AI 点评的建议',
+                        onTap: () => _showMessage(context, '反馈入口后续接入'),
                       ),
                       _SettingRow(
                         icon: Icons.privacy_tip_outlined,
-                        title: '闅愮璇存槑',
-                        subtitle: '褰㈣薄鍥剧墖榛樿淇濆瓨鍦ㄦ湰鍦帮紝鐧诲綍鍚庢墠浼氬悓姝?,
-                        onTap: () => _showMessage(context, '闅愮鏂囨鍚庣画琛ュ厖'),
+                        title: '隐私说明',
+                        subtitle: '形象图片默认保存在本地，登录后才会同步',
+                        onTap: () => _showMessage(context, '隐私文案后续补充'),
                       ),
                       _SettingRow(
                         icon: userState.isLoggedIn
                             ? Icons.logout_rounded
                             : Icons.login_rounded,
-                        title: userState.isLoggedIn ? '閫€鍑虹櫥褰? : '鐧诲綍璐﹀彿',
+                        title: userState.isLoggedIn ? '退出登录' : '登录账号',
                         subtitle: userState.isLoggedIn
-                            ? '閫€鍑哄悗鏈湴鏁版嵁浠嶄細淇濈暀'
-                            : '鐧诲綍鍚庡彲寮€鍚悓姝ュ拰浼氬憳鑳藉姏',
+                            ? '退出后本地数据仍会保留'
+                            : '登录后可开启同步和会员能力',
                         iconColor: userState.isLoggedIn
                             ? AppTheme.errorColor
                             : AppTheme.primaryLight,
@@ -179,7 +179,7 @@ class ProfileScreen extends ConsumerWidget {
     UserState userState,
   ) async {
     if (userState.isLoggedIn) {
-      _showMessage(context, '璧勬枡缂栬緫鍏ュ彛鍚庣画琛ラ綈');
+      _showMessage(context, '资料编辑入口后续补齐');
       return;
     }
     await Navigator.push(
@@ -304,18 +304,18 @@ class ProfileScreen extends ConsumerWidget {
                     ),
                   ),
                   const SizedBox(height: 18),
-                  const _StorageRow(label: '褰㈣薄鍥剧墖', size: '绾?5.2 MB'),
+                  const _StorageRow(label: '形象图片', size: '约 5.2 MB'),
                   const SizedBox(height: 10),
-                  const _StorageRow(label: '鏈嶈绱犳潗', size: '绾?8.3 MB'),
+                  const _StorageRow(label: '服装素材', size: '约 8.3 MB'),
                   const SizedBox(height: 10),
-                  const _StorageRow(label: '璇曠┛缁撴灉', size: '绾?2.1 MB'),
+                  const _StorageRow(label: '试穿结果', size: '约 2.1 MB'),
                   const SizedBox(height: 20),
                   OutlinedButton(
                     onPressed: () {
                       Navigator.pop(sheetContext);
-                      _showMessage(context, '娓呯悊缂撳瓨閫昏緫鍚庣画琛ラ綈');
+                      _showMessage(context, '清理缓存逻辑后续补齐');
                     },
-                    child: const Text('娓呯悊鏈湴缂撳瓨'),
+                    child: const Text('清理本地缓存'),
                   ),
                 ],
               ),
@@ -405,8 +405,8 @@ class _ProfileHero extends StatelessWidget {
                         userState.isLoggedIn
                             ? (userState.nickname ??
                                 userState.username ??
-                                'FitMirror 鐢ㄦ埛')
-                            : '鏈櫥褰?,
+                                'FitMirror 用户')
+                            : '未登录',
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 24,
@@ -416,8 +416,8 @@ class _ProfileHero extends StatelessWidget {
                       const SizedBox(height: 6),
                       Text(
                         userState.isLoggedIn
-                            ? '鐐瑰嚮绠＄悊璧勬枡涓庡悓姝ヨ兘鍔?
-                            : '鐧诲綍鍚庡彲鍚屾褰㈣薄銆佽祫浜у拰璇曠┛鍘嗗彶',
+                            ? '点击管理资料与同步能力'
+                            : '登录后可同步形象、资产和试穿历史',
                         style: TextStyle(
                           color: Colors.white.withOpacity(0.86),
                           fontSize: 13,
@@ -432,11 +432,11 @@ class _ProfileHero extends StatelessWidget {
             const SizedBox(height: 18),
             Row(
               children: [
-                Expanded(child: _HeroMetric(label: '褰㈣薄', value: '$avatars')),
+                Expanded(child: _HeroMetric(label: '形象', value: '$avatars')),
                 const SizedBox(width: 10),
-                Expanded(child: _HeroMetric(label: '鍗曞搧', value: '$clothes')),
+                Expanded(child: _HeroMetric(label: '单品', value: '$clothes')),
                 const SizedBox(width: 10),
-                Expanded(child: _HeroMetric(label: '璇曠┛', value: '$tryOns')),
+                Expanded(child: _HeroMetric(label: '试穿', value: '$tryOns')),
               ],
             ),
           ],
@@ -507,8 +507,8 @@ class _OfflineCard extends StatelessWidget {
           Expanded(
             child: Text(
               isLoggedIn
-                  ? '褰撳墠浠嶄互鏈湴鏁版嵁涓轰富锛屽悗缁細琛ヤ笂鐪熷疄鍚屾鐘舵€併€?
-                  : '浣犵幇鍦ㄥ浜庣绾夸紭鍏堟ā寮忥紝鎵€鏈夎瘯绌跨粨鏋滈粯璁ゅ彧淇濆瓨鍦ㄦ湰鍦般€?,
+                  ? '当前仍以本地数据为主，后续会补上真实同步状态。'
+                  : '你现在处于离线优先模式，所有试穿结果默认只保存在本地。',
               style: const TextStyle(
                 color: AppTheme.warningColor,
                 fontSize: 13,
@@ -683,7 +683,7 @@ class _ProCard extends StatelessWidget {
               ),
               const Spacer(),
               const Text(
-                '楼19.9 / 鏈?,
+                '￥19.9 / 月',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 18,
@@ -694,7 +694,7 @@ class _ProCard extends StatelessWidget {
           ),
           const SizedBox(height: 18),
           const Text(
-            '鍗囩骇 FitMirror Pro',
+            '升级 FitMirror Pro',
             style: TextStyle(
               color: Colors.white,
               fontSize: 24,
@@ -703,7 +703,7 @@ class _ProCard extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            '瑙ｉ攣鏃犻檺璇曠┛銆佹繁搴?AI 鐐硅瘎銆佸褰㈣薄绠＄悊鍜屽懆鏈熸€х┛鎼姤鍛娿€?,
+            '解锁无限试穿、深度 AI 点评、多形象管理和周期性穿搭报告。',
             style: TextStyle(
               color: Colors.white.withOpacity(0.88),
               fontSize: 14,
@@ -711,11 +711,11 @@ class _ProCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 18),
-          const _ProFeature(text: '鏃犻檺娆¤瘯绌夸笌鏇存繁鐨?AI 鐐硅瘎'),
+          const _ProFeature(text: '无限次试穿与更深的 AI 点评'),
           const SizedBox(height: 8),
-          const _ProFeature(text: '鏈€澶?5 涓暟瀛楀舰璞?),
+          const _ProFeature(text: '最多 5 个数字形象'),
           const SizedBox(height: 8),
-          const _ProFeature(text: '姣忓懆 / 姣忔湀绌挎惌鎶ュ憡'),
+          const _ProFeature(text: '每周 / 每月穿搭报告'),
           const SizedBox(height: 18),
           Container(
             height: 54,
@@ -725,7 +725,7 @@ class _ProCard extends StatelessWidget {
             ),
             child: const Center(
               child: Text(
-                '鍗冲皢寮€鏀惧崌绾?,
+                '即将开放升级',
                 style: TextStyle(
                   color: AppTheme.primaryColor,
                   fontSize: 15,
