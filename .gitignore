@@ -1,0 +1,21 @@
+# Local editor and assistant state
+.claude/
+.vscode/
+.idea/
+
+# OS clutter
+.DS_Store
+Thumbs.db
+
+# Root build artifacts
+*.apk
+icon_preview.png
+
+# Backend build outputs
+backend/target/
+
+# Flutter local/cache outputs
+fitmirror/.dart_tool/
+fitmirror/.flutter-plugins
+fitmirror/.flutter-plugins-dependencies
+fitmirror/build/

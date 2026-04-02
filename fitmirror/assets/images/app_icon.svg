@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#E53935"/>
+      <stop offset="100%" style="stop-color:#B71C1C"/>
+    </linearGradient>
+    <linearGradient id="mirrorGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFCDD2"/>
+      <stop offset="100%" style="stop-color:#EF9A9A"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background circle with gradient -->
+  <circle cx="512" cy="512" r="480" fill="url(#bgGradient)"/>
+
+  <!-- Mirror frame -->
+  <ellipse cx="512" cy="420" rx="220" ry="280" fill="none" stroke="#FFFFFF" stroke-width="24" opacity="0.9"/>
+
+  <!-- Mirror glass -->
+  <ellipse cx="512" cy="420" rx="190" ry="250" fill="url(#mirrorGradient)" opacity="0.3"/>
+
+  <!-- Hanger hook -->
+  <path d="M512 80 L512 140" stroke="#FFFFFF" stroke-width="16" stroke-linecap="round"/>
+  <circle cx="512" cy="70" r="20" fill="none" stroke="#FFFFFF" stroke-width="12"/>
+
+  <!-- Dress silhouette inside mirror -->
+  <path d="M420 280
+           C400 280 380 320 380 380
+           L380 480
+           C380 520 400 560 420 580
+           L420 650
+           C420 670 440 680 480 680
+           L544 680
+           C584 680 604 670 604 650
+           L604 580
+           C624 560 644 520 644 480
+           L644 380
+           C644 320 624 280 604 280
+           Z"
+        fill="#FFFFFF" opacity="0.95"/>
+
+  <!-- Dress neckline -->
+  <path d="M450 280 C480 300 512 300 544 280" fill="none" stroke="url(#bgGradient)" stroke-width="8"/>
+
+  <!-- Sparkle accents -->
+  <circle cx="320" cy="300" r="8" fill="#FFFFFF" opacity="0.8"/>
+  <circle cx="700" cy="350" r="6" fill="#FFFFFF" opacity="0.6"/>
+  <circle cx="340" cy="550" r="5" fill="#FFFFFF" opacity="0.5"/>
+  <circle cx="680" cy="520" r="7" fill="#FFFFFF" opacity="0.7"/>
+
+  <!-- Bottom text area -->
+  <text x="512" y="850" text-anchor="middle" font-family="Arial, sans-serif" font-size="72" font-weight="bold" fill="#FFFFFF" opacity="0.9">FIT</text>
+</svg>
