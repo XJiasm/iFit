@@ -90,12 +90,12 @@ class _TryOnResultScreenState extends ConsumerState<TryOnResultScreen> {
     try {
       await Share.shareXFiles(
         [XFile(widget.resultPath)],
-        text: 'FitMirror 铏氭嫙璇曠┛鏁堟灉',
+        text: 'FitMirror 虚拟试穿效果',
       );
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('鍒嗕韩澶辫触: $e')),
+          SnackBar(content: Text('分享失败: $e')),
         );
       }
     }
@@ -104,7 +104,7 @@ class _TryOnResultScreenState extends ConsumerState<TryOnResultScreen> {
   Future<void> _saveToGallery() async {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: const Text('宸蹭繚瀛樺埌鐩稿唽'),
+        content: const Text('已保存到相册'),
         backgroundColor: AppTheme.accentColor,
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(
@@ -133,15 +133,15 @@ class _TryOnResultScreenState extends ConsumerState<TryOnResultScreen> {
       appBar: _buildAppBar(),
       body: Column(
         children: [
-          // 鏁堟灉鍥惧睍绀?
+          // 效果图展示
           Expanded(
             child: _buildResultImage(),
           ),
 
-          // AI 鐐硅瘎鍗＄墖
+          // AI 点评卡片
           if (_aiComment != null) _buildAiCommentCard(),
 
-          // 搴曢儴鎿嶄綔鏍?
+          // 底部操作栏
           _buildBottomBar(),
         ],
       ),
@@ -157,7 +157,7 @@ class _TryOnResultScreenState extends ConsumerState<TryOnResultScreen> {
         icon: const Icon(Icons.arrow_back),
         onPressed: () => Navigator.popUntil(context, (route) => route.isFirst),
       ),
-      title: const Text('璇曠┛鏁堟灉'),
+      title: const Text('试穿效果'),
       actions: [
         IconButton(
           icon: const Icon(Icons.share),
@@ -203,7 +203,7 @@ class _TryOnResultScreenState extends ConsumerState<TryOnResultScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // 椤堕儴鏍囩鍜岃瘎鍒?
+              // 顶部标签和评分
               Row(
                 children: [
                   Container(
@@ -222,7 +222,7 @@ class _TryOnResultScreenState extends ConsumerState<TryOnResultScreen> {
                         ),
                         const SizedBox(width: 4),
                         Text(
-                          'AI 绌挎惌鐐硅瘎',
+                          'AI 穿搭点评',
                           style: TextStyle(
                             fontSize: 12,
                             color: AppTheme.primaryColor,
@@ -242,7 +242,7 @@ class _TryOnResultScreenState extends ConsumerState<TryOnResultScreen> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Text(
-                      '${_aiComment!.score}鍒?,
+                      '${_aiComment!.score}分',
                       style: const TextStyle(
                         fontSize: 14,
                         color: Colors.white,
@@ -254,7 +254,7 @@ class _TryOnResultScreenState extends ConsumerState<TryOnResultScreen> {
               ),
               const SizedBox(height: 12),
 
-              // 鎬荤粨
+              // 总结
               Text(
                 _aiComment!.summary,
                 style: const TextStyle(
@@ -265,15 +265,15 @@ class _TryOnResultScreenState extends ConsumerState<TryOnResultScreen> {
               ),
               const SizedBox(height: 16),
 
-              // 璇勫垎璇︽儏
-              _buildScoreDetail('棰滆壊鍖归厤', _aiComment!.color.score, _aiComment!.color.comment),
+              // 评分详情
+              _buildScoreDetail('颜色匹配', _aiComment!.color.score, _aiComment!.color.comment),
               const SizedBox(height: 12),
-              _buildScoreDetail('椋庢牸濂戝悎', _aiComment!.style.score, _aiComment!.style.comment),
+              _buildScoreDetail('风格契合', _aiComment!.style.score, _aiComment!.style.comment),
               const SizedBox(height: 16),
 
-              // 閫傜敤鍦哄悎
+              // 适用场合
               Text(
-                '閫傜敤鍦哄悎',
+                '适用场合',
                 style: TextStyle(
                   fontSize: 12,
                   color: Colors.grey[400],
@@ -300,9 +300,9 @@ class _TryOnResultScreenState extends ConsumerState<TryOnResultScreen> {
               ),
               const SizedBox(height: 16),
 
-              // 鎼厤寤鸿
+              // 搭配建议
               Text(
-                '鎼厤寤鸿',
+                '搭配建议',
                 style: TextStyle(
                   fontSize: 12,
                   color: Colors.grey[400],
@@ -331,7 +331,7 @@ class _TryOnResultScreenState extends ConsumerState<TryOnResultScreen> {
 
               const SizedBox(height: 16),
 
-              // 缁撹
+              // 结论
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
@@ -439,7 +439,7 @@ class _TryOnResultScreenState extends ConsumerState<TryOnResultScreen> {
         top: false,
         child: Row(
           children: [
-            // AI 鐐硅瘎鎸夐挳
+            // AI 点评按钮
             Expanded(
               child: OutlinedButton.icon(
                 onPressed: _isGettingAiComment ? null : _getAiComment,
@@ -453,7 +453,7 @@ class _TryOnResultScreenState extends ConsumerState<TryOnResultScreen> {
                         ),
                       )
                     : const Icon(Icons.auto_awesome, size: 18),
-                label: Text(_aiComment != null ? '閲嶆柊鐐硅瘎' : 'AI 鐐硅瘎'),
+                label: Text(_aiComment != null ? '重新点评' : 'AI 点评'),
                 style: OutlinedButton.styleFrom(
                   foregroundColor: Colors.white,
                   side: const BorderSide(color: Colors.white54),
@@ -465,12 +465,12 @@ class _TryOnResultScreenState extends ConsumerState<TryOnResultScreen> {
               ),
             ),
             const SizedBox(width: 12),
-            // 淇濆瓨鎸夐挳
+            // 保存按钮
             Expanded(
               child: ElevatedButton.icon(
                 onPressed: _saveToGallery,
                 icon: const Icon(Icons.save_alt, size: 18),
-                label: const Text('淇濆瓨'),
+                label: const Text('保存'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppTheme.primaryColor,
                   foregroundColor: Colors.white,
